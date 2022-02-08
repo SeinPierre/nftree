@@ -6,7 +6,7 @@ react-client/.pnp
 .pnp.js
 
 wasm/target
-
+wasm-build/
 
 # testing
 react-client/coverage
