@@ -10,4 +10,5 @@ Listing NFT and generating art from the on-chain data
 ## Building
 `wasm-pack build --out-dir ../wasm-build --target web`
 
+## Running
 `npm start`
