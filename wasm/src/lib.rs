@@ -1,5 +1,6 @@
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
+use web_sys::console;
 
 use std::f64;
 
@@ -18,11 +19,13 @@ fib(n - 1) + fib(n - 2)
 }
 
 #[wasm_bindgen]
-pub fn tree(c: String){
+pub fn tree(c: &str) -> bool {
 
-    let s_slice: &str = &*c;
+    console::log_1(&"Hello in tree".into());
+    console::log_1(&JsValue::from_str(c));
+
     let document = web_sys::window().unwrap().document().unwrap();
-    let canvas = document.get_element_by_id(s_slice).unwrap();
+    let canvas = document.get_element_by_id(c).unwrap();
     let canvas: web_sys::HtmlCanvasElement = canvas
         .dyn_into::<web_sys::HtmlCanvasElement>()
         .map_err(|_| ())
@@ -59,4 +62,8 @@ pub fn tree(c: String){
         .unwrap();
 
     context.stroke();
+
+    console::log_1(&"Hello in tree end".into());
+
+    true
 }

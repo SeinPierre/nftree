@@ -17,17 +17,19 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { green, purple } from '@mui/material/colors';
+
 import wasm from 'wasm';
-import {fib,add_two_ints} from 'wasm';
+import {fib,add_two_ints,tree} from 'wasm';
+
 import { useWeb3React } from "@web3-react/core";
 // import { injected } from "./wallet/Connect";
 // import web3 from "web3";
 import { InjectedConnector } from '@web3-react/injected-connector';
-// import { argv0 } from 'process';
-
 import { Web3ReactProvider } from '@web3-react/core'
 import Web3 from 'web3'
 import { provider } from 'web3-core';
+// import { argv0 } from 'process';
 
 function getLibrary(provider: provider) {
   return new Web3(provider)
@@ -70,7 +72,16 @@ async function disconnect(deactivate: (arg0: InjectedConnector) => any){
 
 }
 
-const theme = createTheme();
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: purple[500],
+    },
+    secondary: {
+      main: green[500],
+    },
+  },
+});
 
 function Copyright() {
   return (
@@ -94,6 +105,13 @@ async function returnValues(setSum: { (value: React.SetStateAction<number>): voi
   
   setSum(sumResult);
   setFib(fibResult);
+
+}
+
+async function drawNFTs(){
+  for(let i= 0; i <cards.length; i++){
+    await tree(cards[i].key.toString());
+  }
 }
 
 function App() {
@@ -101,9 +119,10 @@ function App() {
   const { active, account, library, activate,deactivate } = useWeb3React()
   const [sum, setSum] = useState<number>(0);
   const [fibo, setFib] = useState<number>(0);
-  const [addr, setAddr] = useState<number>(0);
 
   returnValues(setSum,setFib)
+  drawNFTs()
+
 
   console.log(sum,fibo);
   
@@ -119,7 +138,7 @@ function App() {
 
           {(active) ?
             <Typography variant="h6" color="inherit" noWrap>Welcome {account}</Typography>
-            : <Typography variant="h6" color="inherit" noWrap>{sum} {fibo}</Typography>
+            : <Typography variant="h6" color="inherit" noWrap>NFTree</Typography>
           }          
           
           {(active) ?
@@ -172,15 +191,15 @@ function App() {
                 <Card
                   sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
                 >
-                  <CardMedia
+                  <><canvas id={card.key.toString()} key={card.key}></canvas></>
+                  {/* <CardMedia
                     component="img"
                     sx={{
                       // 16:9
                       pt: '56.25%',
                     }}
                     image="https://source.unsplash.com/random"
-                    alt="random"
-                  />
+                    alt="random" /> */}
                   <CardContent sx={{ flexGrow: 1 }}>
                     <Typography gutterBottom variant="h5" component="h2">
                       {card.name}
@@ -191,7 +210,7 @@ function App() {
                   </CardContent>
                   <CardActions>
                     {/* <Button size="small">View</Button>
-                    <Button size="small">Edit</Button> */}
+    <Button size="small">Edit</Button> */}
                   </CardActions>
                 </Card>
               </Grid>
